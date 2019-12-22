@@ -127,9 +127,6 @@ public:
     int GetInstDependencies(unsigned inst_idx, int *src1DepInst, int *src2DepInst){
         *src1DepInst = this->all_commands[inst_idx]->GetDepOne();
         *src2DepInst = this->all_commands[inst_idx]->GetDepTwo();
-        if (*src1DepInst == -1 and *src2DepInst == -1){
-            return -1;
-        }
         return 0;
     }
 
