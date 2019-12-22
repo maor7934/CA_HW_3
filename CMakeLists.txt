@@ -4,5 +4,5 @@ project(CA_HW_3)
 set(CMAKE_CXX_STANDARD 11)
 
 add_executable(CA_HW_3
-                dflow_main.cpp
+                dflow_main.c
                 dflow_calc-skeleton.cpp)
