@@ -53,6 +53,12 @@ public:
     }
 };
 int GetMax (Command* one, Command* two){
+    if (one == nullptr){
+        return two->GetDepth();
+    }
+    if (two == nullptr){
+        return one->GetDepth();
+    }
     return one->GetDepth() > two->GetDepth() ? one->GetDepth() : two->GetDepth();
 }
 int GetExitDepth (Command** command_array, int size){
