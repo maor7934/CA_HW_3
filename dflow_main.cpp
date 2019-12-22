@@ -124,6 +124,18 @@ void usage(void) {
 }
 
 int main(int argc, const char *argv[]) {
+    argc = 8;
+    argv[1] = "C:\\Users\\user\\Desktop\\opcode1.dat";
+    argv[2] = "C:\\Users\\user\\Desktop\\example2.in";
+    argv[3] = "p0";
+    argv[4] = "p10";
+    argv[5] = "p14";
+    argv[6] = "d4";
+    argv[7] = "d14";
+//    argv[8] = "d3";
+//    argv[9] = "d9";
+//    argv = ["blabla", "C:\\Users\\user\\Desktop\\opcode1.dat", "C:\\Users\\user\\Desktop\\example1.in",
+//              ]
     const char *opFname = argv[1];
     const char *progName = argv[2];
     unsigned int opsLatency[MAX_OPS];
@@ -133,9 +145,9 @@ int main(int argc, const char *argv[]) {
     ProgCtx ctx;
     char *endPtr;
 
-    if (argc < 3) {
-        usage();
-    }
+//    if (argc < 3) {
+//        usage();
+//    }
 
     printf("Reading the opcodes latency info from %s ... ", opFname);
     numOps = readOpsLatency(opFname, opsLatency);

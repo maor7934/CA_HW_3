@@ -4,9 +4,61 @@
 #include "dflow_calc.h"
 
 
-class Command{
 
+class Command {
+private:
+    bool dependet_on_me;
+    int dep_one;
+    int dep_two;
+    int depth;
+    int my_time;
+public:
+    Command (int dep_one_t, int dep_two_t, int depth_t, int my_time_t) : dependet_on_me(false), dep_one(dep_one_t),
+                                                                         dep_two(dep_two_t), depth(depth_t),my_time(my_time_t){}
+    ~Command() = default;
+    void AddDependence (){
+        this->dependet_on_me = true;
+    }
+    int GetDepOne (){
+        return this->dep_one;
+    }
+    int GetDepTwo (){
+        return this->dep_two;
+    }
+    int GetDepth (){
+        return this->depth;
+    }
+    int GetMyTime (){
+        return this->my_time;
+    }
+    bool CheckLast (){
+        return this->dependet_on_me;
+    }
 };
+int GetMax (Command* one, Command* two){
+    if (!one and !two){
+        return 0;
+    }
+    if (one == nullptr){
+        return (two->GetDepth() + two->GetMyTime());
+    }
+    if (two == nullptr){
+        return (one->GetDepth() + one->GetMyTime());
+    }
+    return (one->GetDepth() + one->GetMyTime()) > (two->GetDepth() + two->GetMyTime())
+    ? (one->GetDepth() + one->GetMyTime()) : (two->GetDepth() + two->GetMyTime());
+}
+int CalcExitDepth (Command** command_array, unsigned size){
+    int max_depth = 0;
+    for (int i = 0; i < size; i++){
+        if (!command_array[i]->CheckLast()){
+            if (command_array[i]->GetDepth() + command_array[i]->GetMyTime() > max_depth){
+                max_depth = command_array[i]->GetDepth() + command_array[i]->GetMyTime();
+            }
+        }
+    }
+    return max_depth;
+}
 
 class Dependecies_Calc{
 private:
@@ -27,14 +79,14 @@ private:
             first_relevant_command = this->last_relevant_command[temp_ints->src1Idx];
             Command * real_first_command = NULL;
             if (first_relevant_command!= -1){
-                Command * real_first_command = this->all_commands[first_relevant_command];
+                real_first_command = this->all_commands[first_relevant_command];
                 real_first_command->AddDependence();
             }
             //find second depended command if there is none, return NULL
             second_relevant_command = this->last_relevant_command[temp_ints->src2Idx];
             Command * real_second_command = NULL;
             if (second_relevant_command!= -1){
-                Command * real_second_command = this->all_commands[second_relevant_command];
+                real_second_command = this->all_commands[second_relevant_command];
                 real_second_command->AddDependence();
             }
             //create new command
@@ -54,7 +106,7 @@ public:
             this->last_relevant_command[i] = -1;
         }
         this->_calc_my_data(opsLatency,  progTrace,  numOfInsts);
-        this->max_exit_time = GetExitDepth(this->all_commands, numOfInsts);
+        this->max_exit_time = CalcExitDepth(this->all_commands, numOfInsts);
     }
 
     ~Dependecies_Calc(){
@@ -75,6 +127,10 @@ public:
     int GetInstDependencies(unsigned inst_idx, int *src1DepInst, int *src2DepInst){
         *src1DepInst = this->all_commands[inst_idx]->GetDepOne();
         *src2DepInst = this->all_commands[inst_idx]->GetDepTwo();
+        if (*src1DepInst == -1 and *src2DepInst == -1){
+            return -1;
+        }
+        return 0;
     }
 
 };
@@ -100,53 +156,3 @@ int getProgDepth(ProgCtx ctx) {
     return ((Dependecies_Calc*)ctx)->GetExitDepth();
 }
 
-class Command {
-private:
-    bool dependet_on_me;
-    int dep_one;
-    int dep_two;
-    int depth;
-    int my_time;
-public:
-    Command (int dep_one_t, int dep_two_t, int depth_t, int my_time_t) : dependet_on_me(false), dep_one(dep_one_t),
-    dep_two(dep_two_t), depth(depth_t),my_time(my_time_t){}
-    ~Command() = default;
-    void AddDependence (){
-        this->dependet_on_me = true;
-    }
-    int GetDepOne (){
-        return this->dep_one;
-    }
-    int GetDepTwo (){
-        return this->dep_two;
-    }
-    int GetDepth (){
-        return this->depth;
-    }
-    int GetMyTime (){
-        return this->my_time;
-    }
-    bool CheckLast (){
-        return this->dependet_on_me;
-    }
-};
-int GetMax (Command* one, Command* two){
-    if (one == nullptr){
-        return two->GetDepth();
-    }
-    if (two == nullptr){
-        return one->GetDepth();
-    }
-    return one->GetDepth() > two->GetDepth() ? one->GetDepth() : two->GetDepth();
-}
-int GetExitDepth (Command** command_array, int size){
-    int max_depth = 0;
-    for (int i = 0; i < size; i++){
-        if (command_array[i]->CheckLast()){
-            if (command_array[i]->GetDepth() > max_depth){
-                max_depth = command_array[i]->GetDepth();
-            }
-        }
-        return max_depth;
-    }
-}
