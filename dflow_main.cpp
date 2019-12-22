@@ -124,14 +124,14 @@ void usage(void) {
 }
 
 int main(int argc, const char *argv[]) {
-    argc = 8;
-    argv[1] = "C:\\Users\\user\\Desktop\\opcode1.dat";
-    argv[2] = "C:\\Users\\user\\Desktop\\example2.in";
-    argv[3] = "p0";
-    argv[4] = "p10";
-    argv[5] = "p14";
-    argv[6] = "d4";
-    argv[7] = "d14";
+//    argc = 8;
+//    argv[1] = "C:\\Users\\user\\Desktop\\opcode1.dat";
+//    argv[2] = "C:\\Users\\user\\Desktop\\example2.in";
+//    argv[3] = "p0";
+//    argv[4] = "p10";
+//    argv[5] = "p14";
+//    argv[6] = "d4";
+//    argv[7] = "d14";
 //    argv[8] = "d3";
 //    argv[9] = "d9";
 //    argv = ["blabla", "C:\\Users\\user\\Desktop\\opcode1.dat", "C:\\Users\\user\\Desktop\\example1.in",
